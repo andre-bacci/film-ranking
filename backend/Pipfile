@@ -1,0 +1,45 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "==4.1.*"
+psycopg2-binary = "==2.9.*"
+djangorestframework-simplejwt = "==5.2.*"
+django-cors-headers = "==3.13.*"
+django-environ = "==0.9.*"
+django-solo = "==2.1.*"
+requests = "==2.27.*"
+drf-yasg = "==1.21.*"
+tzdata = "==2023.3"
+# Support for backports.zoneinfo in Python 3.9+ is currently minimal, since it is
+#expected that you would use the standard library zoneinfo module instead.
+"backports.zoneinfo" = { version = "==0.2.*", markers="python_version < '3.9'" }
+django-log-request-id = "==2.0.*"
+sorl-thumbnail-serializer-field = "==0.2.1"
+pillow = "==9.1.0"
+gunicorn = "==20.1.0"
+apscheduler = "==3.10.*"
+statsd = "==4.0.*"
+pyngrok = "*"
+django-storages = "==1.13.2"
+boto3 = "==1.26.165"
+django-filter = "==23.2.*"
+django-easy-audit = "===1.3.3"
+sentry-sdk = "*"
+django-admin-sortable2 = "==2.1.*"
+
+[dev-packages]
+pre-commit = "*"
+gunicorn = "*"
+pylint = "*"
+flake8 = "*"
+black = "*"
+pyyaml = "*"
+coverage = "*"
+typing-extensions = "*"
+locust = "*"
+
+[requires]
+python_version = "3.9"
