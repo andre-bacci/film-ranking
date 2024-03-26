@@ -1,4 +1,4 @@
-from rest_framework import mixins, status, viewsets
+from rest_framework import filters, mixins, viewsets
 from rest_framework.permissions import AllowAny
 
 from .models import Film
@@ -11,4 +11,5 @@ class FilmView(
     queryset = Film.objects.all()
     serializer_class = FilmSerializer
     permission_classes = [AllowAny]
-    # search_fiels = ["imdb_id", "tmdb_id", "title", "original_title", "pt_br_title"]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["imdb_id", "tmdb_id", "title", "original_title", "pt_br_title"]
