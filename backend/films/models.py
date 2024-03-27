@@ -57,8 +57,6 @@ class Person(BaseCreatedUpdatedModel, models.Model):
     def convert_person_queryset_to_string(queryset: "QuerySet[Person]") -> str:
         return ", ".join(list(queryset.values_list("name", flat=True)))
 
-    # TODO: Raise exception when attempting to save blank or null imdb id
-
 
 class CreditRoleOptions(models.TextChoices):
     ACTOR = "actor"

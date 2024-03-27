@@ -34,8 +34,8 @@ class ListFilm(BaseUUIDModel, BaseCreatedUpdatedModel, models.Model):
         to=List, related_name="list_films", on_delete=models.CASCADE
     )
     film = models.ForeignKey(
-        to=Film, related_name="list_films", on_delete=models.CASCADE
-    )  # TODO: Change to DO_NOTHING when retrieving from API is enabled
+        to=Film, related_name="list_films", on_delete=models.DO_NOTHING
+    )  # TODO: Change to DO_NOTHING
     ranking = models.IntegerField(blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
     grade = models.FloatField(blank=True, null=True)
@@ -65,7 +65,7 @@ class RankingFilm(BaseUUIDModel):
     ranking = models.ForeignKey(to=Ranking, on_delete=models.CASCADE)
     film = models.ForeignKey(
         to=Film, related_name="ranking_films", on_delete=models.CASCADE
-    )  # TODO: Change to DO_NOTHING when retrieving from API is enabled
+    )  # TODO: Change to DO_NOTHING
     position = (
         models.IntegerField()
     )  # caches calculated position to avoid having to perform multiple queries for each list viewing
