@@ -1,0 +1,42 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Django",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/backend/manage.py",
+      "args": ["runserver", "0.0.0.0:8000"],
+      "django": true,
+      "envFile": "${workspaceFolder}/backend/.env",
+      "justMyCode": true
+    },
+    {
+      "name": "Python: Make Migrations",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/backend/manage.py",
+      "args": ["makemigrations"],
+      "django": true,
+      "envFile": "${workspaceFolder}/backend/.env"
+    },
+    {
+      "name": "Python: Migrate",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/backend/manage.py",
+      "args": ["migrate"],
+      "django": true,
+      "envFile": "${workspaceFolder}/backend/.env"
+    },
+    {
+      "name": "Python: Shell",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/backend/manage.py",
+      "args": ["shell"],
+      "django": true,
+      "envFile": "${workspaceFolder}/backend/.env"
+    }
+  ]
+}
