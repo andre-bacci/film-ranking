@@ -1,5 +1,5 @@
 from rest_framework import mixins, status, viewsets
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from users.models import User
@@ -12,7 +12,7 @@ class CompilationView(
     mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet
 ):
     queryset = Compilation.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     search_fields = ["title"]
 
     def get_serializer_class(self):
