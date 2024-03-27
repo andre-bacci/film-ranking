@@ -20,15 +20,15 @@ class Film(BaseCreatedUpdatedModel, models.Model):
 
     @property
     def directed_by(self) -> "QuerySet[Person]":
-        return self.get_credited_people_by_role(role="director")
+        return self.get_credited_people_by_role(role=CreditRoleOptions.DIRECTOR)
 
     @property
     def written_by(self) -> "QuerySet[Person]":
-        return self.get_credited_people_by_role(role="writer")
+        return self.get_credited_people_by_role(role=CreditRoleOptions.WRITER)
 
     @property
     def starring(self) -> "QuerySet[Person]":
-        return self.get_credited_people_by_role(role="actor")
+        return self.get_credited_people_by_role(role=CreditRoleOptions.ACTOR)
 
     def get_credited_people_by_role(self, role) -> "QuerySet[Person]":
         # TODO: Make query more efficient
@@ -60,12 +60,18 @@ class Person(BaseCreatedUpdatedModel, models.Model):
     # TODO: Raise exception when attempting to save blank or null imdb id
 
 
+class CreditRoleOptions(models.TextChoices):
+    ACTOR = "actor"
+    DIRECTOR = "director"
+    WRITER = "writer"
+
+
 class Credit(BaseUUIDModel, BaseCreatedUpdatedModel, models.Model):
     person = models.ForeignKey(
         "Person", related_name="credits", on_delete=models.CASCADE
     )
     film = models.ForeignKey("Film", related_name="credits", on_delete=models.CASCADE)
-    role = models.CharField(max_length=100)
+    role = models.CharField(max_length=100, choices=CreditRoleOptions.choices)
 
     def __str__(self) -> str:
         return f"{self.person} - {self.film} ({self.role})"
