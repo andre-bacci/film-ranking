@@ -11,3 +11,9 @@ class CompilationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Compilation
         fields = "__all__"
+
+
+class CompilationCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Compilation
+        fields = ["title"]
