@@ -42,7 +42,7 @@ class CreditSerializer(serializers.ModelSerializer):
 
 class PersonSaveSerializer(serializers.ModelSerializer):
     imdb_id = serializers.CharField(max_length=12, allow_null=True, allow_blank=True)
-    tmdb_id = serializers.IntegerField(required=False, allow_null=True)
+    tmdb_id = serializers.IntegerField(required=True)
     name = serializers.CharField(max_length=512)
     bio = serializers.CharField(required=False, allow_null=True, allow_blank=True)
     date_of_birth = serializers.DateField(required=False, allow_null=True)

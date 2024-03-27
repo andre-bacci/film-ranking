@@ -5,8 +5,8 @@ from utils.models import BaseCreatedUpdatedModel, BaseUUIDModel
 
 
 class Film(BaseCreatedUpdatedModel, models.Model):
-    imdb_id = models.CharField(max_length=12, primary_key=True)
-    tmdb_id = models.IntegerField(blank=True, null=True)
+    tmdb_id = models.IntegerField(primary_key=True)
+    imdb_id = models.CharField(max_length=12, blank=True, null=True)
     title = models.CharField(max_length=512)
     original_title = models.CharField(max_length=512, blank=True, null=True)
     pt_br_title = models.CharField(max_length=512, blank=True, null=True)
@@ -40,8 +40,8 @@ class Film(BaseCreatedUpdatedModel, models.Model):
 
 
 class Person(BaseCreatedUpdatedModel, models.Model):
-    imdb_id = models.CharField(max_length=12, primary_key=True)
-    tmdb_id = models.IntegerField(blank=True, null=True)
+    tmdb_id = models.IntegerField(primary_key=True)
+    imdb_id = models.CharField(max_length=12, blank=True, null=True)
     name = models.CharField(max_length=512)
     bio = models.TextField(blank=True, null=True)
     films = models.ManyToManyField(
