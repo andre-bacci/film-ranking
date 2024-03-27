@@ -14,7 +14,9 @@ class Compilation(BaseUUIDModel, BaseCreatedUpdatedModel, models.Model):
 
 
 class List(BaseUUIDModel, BaseCreatedUpdatedModel, models.Model):
-    compilation = models.ForeignKey(to=Compilation, on_delete=models.CASCADE)
+    compilation = models.ForeignKey(
+        to=Compilation, related_name="lists", on_delete=models.CASCADE
+    )
     films = models.ManyToManyField(Film, through="ListFilm")
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE
@@ -35,7 +37,7 @@ class ListFilm(BaseUUIDModel, BaseCreatedUpdatedModel, models.Model):
     )
     film = models.ForeignKey(
         to=Film, related_name="list_films", on_delete=models.DO_NOTHING
-    )  # TODO: Change to DO_NOTHING
+    )
     ranking = models.IntegerField(blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
     grade = models.FloatField(blank=True, null=True)
