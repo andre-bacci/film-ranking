@@ -32,6 +32,7 @@ env = environ.FileAwareEnv(
     # External APIs
     TMDB_API_KEY=(str, ""),
     TMDB_API_TOKEN=(str, ""),
+    TMDB_REQUEST_TIMEOUT=(int, 10),
     DJANGO_SECRET_KEY=(str, "insecure_secret_key"),
 )
 
@@ -158,3 +159,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"]
 }
+
+TMDB_API_TOKEN = env.str("TMDB_API_TOKEN")
+TMDB_REQUEST_TIMEOUT = env.int("TMDB_REQUEST_TIMEOUT")

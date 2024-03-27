@@ -49,7 +49,7 @@ class BaseService:
 class TMDBService(BaseService):
     def __init__(self, *args, **kwargs):
         self.base_url = "https://api.themoviedb.org/3"
-        self.film_details_url = f"{self.base_url}/movies/{{film_id}}"
+        self.film_details_url = f"{self.base_url}/movie/{{film_id}}"
         super().__init__(*args, **kwargs)
 
     def get_auth_header(self):
