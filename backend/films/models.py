@@ -20,19 +20,20 @@ class Film(BaseCreatedUpdatedModel, models.Model):
 
     @property
     def directed_by(self) -> "QuerySet[Person]":
-        return self.get_credits_by_role(role="director")
+        return self.get_credited_people_by_role(role="director")
 
     @property
     def written_by(self) -> "QuerySet[Person]":
-        return self.get_credits_by_role(role="writer")
+        return self.get_credited_people_by_role(role="writer")
 
     @property
     def starring(self) -> "QuerySet[Person]":
-        return self.get_credits_by_role(role="actor")
+        return self.get_credited_people_by_role(role="actor")
 
-    def get_credits_by_role(self, role) -> "QuerySet[Person]":
-        credits: QuerySet[Credit] = self.credits
-        return credits.filter(role__iexact=role).values_list("person", flat=True)
+    def get_credited_people_by_role(self, role) -> "QuerySet[Person]":
+        # TODO: Make query more efficient
+        credits_by_role: QuerySet[Credit] = self.credits.filter(role__iexact=role)
+        return Person.objects.filter(credits__in=credits_by_role)
 
     def __str__(self) -> str:
         return f"{self.title} ({self.release_year})"
@@ -55,6 +56,8 @@ class Person(BaseCreatedUpdatedModel, models.Model):
     @staticmethod
     def convert_person_queryset_to_string(queryset: "QuerySet[Person]") -> str:
         return ", ".join(list(queryset.values_list("name", flat=True)))
+
+    # TODO: Raise exception when attempting to save blank or null imdb id
 
 
 class Credit(BaseUUIDModel, BaseCreatedUpdatedModel, models.Model):
