@@ -4,5 +4,5 @@ from .views import FilmView
 
 urlpatterns = [
     path("", FilmView.as_view(actions={"get": "list"})),
-    path("<str:pk>", FilmView.as_view(actions={"get": "retrieve"})),
+    path("<str:imdb_id>", FilmView.as_view(actions={"get": "retrieve"})),
 ]
