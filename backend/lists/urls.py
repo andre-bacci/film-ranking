@@ -3,6 +3,9 @@ from django.urls import path
 from .views import CompilationView
 
 urlpatterns = [
-    path("", CompilationView.as_view(actions={"get": "list"})),
-    path("<str:pk>", CompilationView.as_view(actions={"get": "retrieve"})),
+    path(
+        "compilations/",
+        CompilationView.as_view(actions={"get": "list", "post": "create"}),
+    ),
+    path("compilations/<str:pk>", CompilationView.as_view(actions={"get": "retrieve"})),
 ]
