@@ -87,6 +87,7 @@ class FilmService(BaseTMDBService):
         return film
 
     def get_film(self, imdb_id) -> Film:
+        # TODO: Allow searching for imdb_id and tmdb_id
         try:
             film = Film.objects.get(imdb_id=imdb_id)
         except ObjectDoesNotExist:

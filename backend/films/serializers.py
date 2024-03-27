@@ -59,9 +59,7 @@ class PersonSaveSerializer(serializers.ModelSerializer):
             "date_of_death",
         ]
 
-    def save(self, validated_data):
-        if not validated_data.get("imdb_id"):
-            return None
+    def save(self, validated_data: OrderedDict):
         return Person.objects.create(**validated_data)
 
 
@@ -92,6 +90,4 @@ class FilmSaveSerializer(serializers.ModelSerializer):
         ]
 
     def save(self, validated_data: OrderedDict) -> Film:
-        if not validated_data.get("imdb_id"):
-            return None
         return Film.objects.create(**validated_data)
