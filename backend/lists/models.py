@@ -1,5 +1,7 @@
 from django.conf import settings
-from django.db import models
+from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
+from django.db import IntegrityError, models
 
 from films.models import Film
 from utils.models import BaseCreatedUpdatedModel, BaseUUIDModel
@@ -38,7 +40,9 @@ class ListFilm(BaseUUIDModel, BaseCreatedUpdatedModel, models.Model):
     film = models.ForeignKey(
         to=Film, related_name="list_films", on_delete=models.DO_NOTHING
     )
-    ranking = models.IntegerField(blank=True, null=True)
+    ranking = models.IntegerField(
+        blank=True, null=True, validators=[MinValueValidator(1)]
+    )
     comment = models.TextField(blank=True, null=True)
     grade = models.FloatField(blank=True, null=True)
     edited_at = models.DateTimeField(
@@ -52,6 +56,13 @@ class ListFilm(BaseUUIDModel, BaseCreatedUpdatedModel, models.Model):
 
     def __str__(self) -> str:
         return f"{self.film} ({self.list})"
+
+    def save(self, *args, **kwargs):
+        if self.list.is_ranked and self.ranking is None:
+            raise ValidationError(
+                message="Films in a ranked list should all have rankings"
+            )
+        super().save(*args, **kwargs)
 
 
 # Caches a calculated ranking of films

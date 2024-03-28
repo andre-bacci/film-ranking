@@ -6,6 +6,7 @@ from rest_framework import serializers
 
 from films.serializers import FilmSaveSerializer
 from users.serializers import UserSerializer
+from utils.lists import are_elements_contiguous, first_element_is_valid
 from utils.serializers import NestedSerializerManyRelationHandler
 
 from .models import Compilation, List, ListFilm
@@ -35,6 +36,20 @@ class ListFilmSerializer(serializers.ModelSerializer):
 class ListSerializer(serializers.ModelSerializer):
     author = UserSerializer()
     list_films = ListFilmSerializer(many=True)
+
+    def validate(self, data):
+        if not self.data.get("is_ranked"):
+            return super().validate(data)
+        ranking_list = [
+            list_films.get("ranking") for list_films in data.get("list_films")
+        ]
+        if not are_elements_contiguous(ranking_list):
+            raise serializers.ValidationError(
+                "Film rankings should be unique and contiguous"
+            )
+        if not first_element_is_valid(ranking_list, 1):
+            raise serializers.ValidationError("Rankings should start on 1")
+        return super().validate(data)
 
     class Meta:
         model = List

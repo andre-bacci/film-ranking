@@ -52,6 +52,8 @@ class ListView(
     @transaction.atomic
     def create(self, request, compilation_id, format=None):
         user: User = request.user
+        if not user:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
         list_serializer = ListCreateSerializer(data=request.data)
         list_serializer.is_valid(raise_exception=True)
         list: List = list_serializer.create(
