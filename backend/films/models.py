@@ -19,16 +19,28 @@ class Film(BaseCreatedUpdatedModel, models.Model):
         return str(self.release_date.year) if self.release_date.year else None
 
     @property
-    def directed_by(self) -> "QuerySet[Person]":
+    def directed_by_queryset(self) -> "QuerySet[Person]":
         return self.get_credited_people_by_role(role=CreditRoleOptions.DIRECTOR)
 
     @property
-    def written_by(self) -> "QuerySet[Person]":
+    def directed_by(self) -> str:
+        return Person.convert_person_queryset_to_string(self.directed_by_queryset)
+
+    @property
+    def written_by_queryset(self) -> "QuerySet[Person]":
         return self.get_credited_people_by_role(role=CreditRoleOptions.WRITER)
 
     @property
-    def starring(self) -> "QuerySet[Person]":
+    def written_by(self) -> str:
+        return Person.convert_person_queryset_to_string(self.written_by_queryset)
+
+    @property
+    def starring_queryset(self) -> "QuerySet[Person]":
         return self.get_credited_people_by_role(role=CreditRoleOptions.ACTOR)
+
+    @property
+    def starring(self) -> str:
+        return Person.convert_person_queryset_to_string(self.starring_queryset)
 
     def get_credited_people_by_role(self, role) -> "QuerySet[Person]":
         # TODO: Make query more efficient

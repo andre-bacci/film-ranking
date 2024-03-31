@@ -28,9 +28,15 @@ class CompilationCreateSerializer(serializers.ModelSerializer):
 
 
 class ListFilmSerializer(serializers.ModelSerializer):
+    title = serializers.CharField(source="film.title")
+    directed_by = serializers.CharField(source="film.directed_by")
+    written_by = serializers.CharField(source="film.written_by")
+    starring = serializers.CharField(source="film.starring")
+
     class Meta:
         model = ListFilm
         fields = [field.name for field in model._meta.fields]
+        fields.extend(["title", "directed_by", "written_by", "starring"])
 
 
 class ListSerializer(serializers.ModelSerializer):
@@ -41,6 +47,13 @@ class ListSerializer(serializers.ModelSerializer):
         model = List
         fields = [field.name for field in model._meta.fields]
         fields.extend(["list_films"])
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response["list_films"] = sorted(
+            response["list_films"], key=lambda x: x["ranking"]
+        )
+        return response
 
 
 class NestedListFilmSerializer(serializers.ModelSerializer):

@@ -96,7 +96,7 @@ class FilmService(BaseTMDBService):
             )
             film = self.create_film(response=tmdb_film_response)
 
-        if not film.directed_by or not film.written_by:
+        if not film.directed_by_queryset or not film.written_by_queryset:
             tmdb_credit_response = self.tmdb_service.get_film_credits(film_id=imdb_id)
             self.credit_service.create_film_credits(
                 film_id=imdb_id, credits=tmdb_credit_response
