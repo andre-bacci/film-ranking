@@ -4,7 +4,6 @@ from typing import Iterable
 from django.db.models import Q, QuerySet
 from rest_framework import serializers
 
-from films.serializers import FilmSaveSerializer
 from users.serializers import UserSerializer
 from utils.lists import are_elements_contiguous, first_element_is_valid
 from utils.serializers import NestedSerializerManyRelationHandler
