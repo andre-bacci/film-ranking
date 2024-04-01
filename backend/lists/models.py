@@ -1,5 +1,7 @@
 from django.conf import settings
-from django.db import models
+from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
+from django.db import IntegrityError, models
 
 from films.models import Film
 from utils.models import BaseCreatedUpdatedModel, BaseUUIDModel
@@ -14,7 +16,9 @@ class Compilation(BaseUUIDModel, BaseCreatedUpdatedModel, models.Model):
 
 
 class List(BaseUUIDModel, BaseCreatedUpdatedModel, models.Model):
-    compilation = models.ForeignKey(to=Compilation, on_delete=models.CASCADE)
+    compilation = models.ForeignKey(
+        to=Compilation, related_name="lists", on_delete=models.CASCADE
+    )  # TODO: Allow null
     films = models.ManyToManyField(Film, through="ListFilm")
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE
@@ -28,6 +32,12 @@ class List(BaseUUIDModel, BaseCreatedUpdatedModel, models.Model):
     def __str__(self) -> str:
         return f"{self.author.get_full_name()} - {self.compilation}"
 
+    @staticmethod
+    def exists_by_user_and_compilation(user_id, compilation_id) -> bool:
+        return List.objects.filter(
+            author_id=user_id, compilation_id=compilation_id
+        ).exists()
+
 
 class ListFilm(BaseUUIDModel, BaseCreatedUpdatedModel, models.Model):
     list = models.ForeignKey(
@@ -35,8 +45,10 @@ class ListFilm(BaseUUIDModel, BaseCreatedUpdatedModel, models.Model):
     )
     film = models.ForeignKey(
         to=Film, related_name="list_films", on_delete=models.DO_NOTHING
-    )  # TODO: Change to DO_NOTHING
-    ranking = models.IntegerField(blank=True, null=True)
+    )
+    ranking = models.IntegerField(
+        blank=True, null=True, validators=[MinValueValidator(1)]
+    )
     comment = models.TextField(blank=True, null=True)
     grade = models.FloatField(blank=True, null=True)
     edited_at = models.DateTimeField(
@@ -50,6 +62,13 @@ class ListFilm(BaseUUIDModel, BaseCreatedUpdatedModel, models.Model):
 
     def __str__(self) -> str:
         return f"{self.film} ({self.list})"
+
+    def save(self, *args, **kwargs):
+        if self.list.is_ranked and self.ranking is None:
+            raise ValidationError(
+                message="Films in a ranked list should all have rankings"
+            )
+        super().save(*args, **kwargs)
 
 
 # Caches a calculated ranking of films

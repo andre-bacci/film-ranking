@@ -1,7 +1,9 @@
 from django.db import transaction
-from rest_framework import filters, mixins, viewsets
+from rest_framework import filters, mixins, status, viewsets
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+
+from external_services.exceptions import ExternalServiceError
 
 from .models import Film
 from .serializers import FilmSerializer
@@ -17,7 +19,12 @@ class FilmView(mixins.ListModelMixin, viewsets.GenericViewSet):
     film_service = FilmService()
 
     @transaction.atomic
-    def retrieve(self, request, imdb_id, format=None):
-        film = self.film_service.get_film(imdb_id=imdb_id)
+    def retrieve(self, request, film_id, format=None):
+        try:
+            film = self.film_service.get_film(film_id=film_id)
+        except ExternalServiceError as e:
+            return Response(
+                data=e.response_msg, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
         serializer = FilmSerializer(film)
         return Response(serializer.data)
