@@ -1,9 +1,11 @@
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
-from django.db import IntegrityError, models
+from django.db import models
+from django.db.models.query import QuerySet
 
 from films.models import Film
+from films.utils import safely_get_film_by_id
 from utils.models import BaseCreatedUpdatedModel, BaseUUIDModel
 
 
@@ -38,6 +40,16 @@ class List(BaseUUIDModel, BaseCreatedUpdatedModel, models.Model):
             author_id=user_id, compilation_id=compilation_id
         ).exists()
 
+    @property
+    def films_safe(self) -> QuerySet[Film]:
+        try:
+            return self.films.all()
+        except Exception:
+            films = []
+            for list_film in self.list_films.all():
+                films.append(list_film.film_safe)
+                return films
+
 
 class ListFilm(BaseUUIDModel, BaseCreatedUpdatedModel, models.Model):
     list = models.ForeignKey(
@@ -70,6 +82,10 @@ class ListFilm(BaseUUIDModel, BaseCreatedUpdatedModel, models.Model):
             )
         super().save(*args, **kwargs)
 
+    @property
+    def film_safe(self):
+        return safely_get_film_by_id(self.film_id)
+
 
 # Caches a calculated ranking of films
 # The Ranking model is needed to keep the information of the calculation datetime
@@ -93,3 +109,7 @@ class RankingFilm(BaseUUIDModel):
 
     def __str__(self) -> str:
         return f"{self.film} ({self.ranking})"
+
+    @property
+    def film_safe(self):
+        return safely_get_film_by_id(self.film_id)

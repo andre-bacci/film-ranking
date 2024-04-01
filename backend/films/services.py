@@ -17,11 +17,8 @@ class PersonService(BaseTMDBService):
         imdb_id = info.get("imdb_id")
         if not imdb_id:
             info = self.tmdb_service.get_person_details(info.get("id"))
-        person_serializer = (
-            self.tmdb_converter.convert_person_info_to_person_serializer(info)
-        )
-        person_serializer.is_valid(raise_exception=True)
-        return person_serializer.save(person_serializer.validated_data)
+        person_data = self.tmdb_converter.convert_person_info_to_person_data(info)
+        return Person.objects.create(**person_data)
 
     def get_or_create_person(self, info) -> Person:
         try:
@@ -82,11 +79,8 @@ class FilmService(BaseTMDBService):
 
     def create_film(self, response) -> Film:
         film_id = response.get("id")
-        film_serializer = self.tmdb_converter.convert_movie_info_to_film_serializer(
-            response
-        )
-        film_serializer.is_valid(raise_exception=True)
-        film = film_serializer.save(film_serializer.validated_data)
+        film_data = self.tmdb_converter.convert_movie_info_to_film_data(response)
+        film = Film.objects.create(**film_data)
         credits = response.get("credits")
         if credits:
             self.credit_service.create_film_credits(film_id=film_id, credits=credits)

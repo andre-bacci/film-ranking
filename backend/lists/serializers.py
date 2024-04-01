@@ -27,11 +27,11 @@ class CompilationCreateSerializer(serializers.ModelSerializer):
 
 
 class ListFilmSerializer(serializers.ModelSerializer):
-    title = serializers.CharField(source="film.title")
-    directed_by = serializers.CharField(source="film.directed_by")
-    written_by = serializers.CharField(source="film.written_by")
-    starring = serializers.CharField(source="film.starring")
-    release_year = serializers.IntegerField(source="film.release_year")
+    title = serializers.CharField(source="film_safe.title")
+    directed_by = serializers.CharField(source="film_safe.directed_by")
+    written_by = serializers.CharField(source="film_safe.written_by")
+    starring = serializers.CharField(source="film_safe.starring")
+    release_year = serializers.IntegerField(source="film_safe.release_year")
 
     class Meta:
         model = ListFilm

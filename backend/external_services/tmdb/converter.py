@@ -1,5 +1,4 @@
 from films.models import CreditRoleOptions
-from films.serializers import FilmSaveSerializer, PersonSaveSerializer
 
 
 class TMDBConverter:
@@ -9,7 +8,7 @@ class TMDBConverter:
         "Writer": CreditRoleOptions.WRITER,
     }
 
-    def convert_movie_info_to_film_serializer(self, movie_info) -> FilmSaveSerializer:
+    def convert_movie_info_to_film_data(self, movie_info):
         film_data = {
             "imdb_id": movie_info.get("imdb_id"),
             "tmdb_id": movie_info.get("id"),
@@ -20,11 +19,9 @@ class TMDBConverter:
             "synopsis": movie_info.get("overview"),
             "credits": movie_info.get("credits"),
         }
-        return FilmSaveSerializer(data=film_data)
+        return film_data
 
-    def convert_person_info_to_person_serializer(
-        self, person_info
-    ) -> PersonSaveSerializer:
+    def convert_person_info_to_person_data(self, person_info):
         person_data = {
             "imdb_id": person_info.get("imdb_id"),
             "tmdb_id": person_info.get("id"),
@@ -33,7 +30,7 @@ class TMDBConverter:
             "date_of_birth": person_info.get("birthday"),
             "date_of_death": person_info.get("deathday"),
         }
-        return PersonSaveSerializer(data=person_data)
+        return person_data
 
     def convert_crew_job_to_credit_role(self, job):
         if job not in self.crew_job_to_credit_role_map:
