@@ -12,6 +12,7 @@ class TMDBService(BaseService):
         self.base_url = "https://api.themoviedb.org/3"
         self.film_details_url = f"{self.base_url}/movie/{{film_id}}"
         self.film_credits_url = f"{self.base_url}/movie/{{film_id}}/credits"
+        self.film_search_url = f"{self.base_url}/search/movie"
         self.person_details_url = f"{self.base_url}/person/{{person_id}}"
         super().__init__(*args, **kwargs)
 
@@ -50,6 +51,16 @@ class TMDBService(BaseService):
         params = {}
         if append_to_response:
             params["append_to_response"] = append_to_response
+        return self._request_get(
+            url,
+            headers=self.get_auth_header(),
+            timeout=self.get_timeout(),
+            params=params,
+        )
+
+    def search_films(self, query: str, page=1):
+        url = self.film_search_url
+        params = {"query": query, "page": page, "include_adult": True}
         return self._request_get(
             url,
             headers=self.get_auth_header(),

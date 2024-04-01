@@ -28,3 +28,20 @@ class FilmView(mixins.ListModelMixin, viewsets.GenericViewSet):
             )
         serializer = FilmSerializer(film)
         return Response(serializer.data)
+
+    @transaction.atomic
+    def search(self, request, format=None):
+        query = request.query_params.get("search")
+        page = int(request.query_params.get("page")) or 1
+        length = int(request.query_params.get("length")) or 5
+        try:
+            films = self.film_service.search_films(
+                query=query, page=page, length=length
+            )
+        except ExternalServiceError as e:
+            return Response(
+                data=e.response_msg, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+        serializer = FilmSerializer(films, many=True)
+        return Response(serializer.data)

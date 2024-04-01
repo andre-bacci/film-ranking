@@ -21,7 +21,9 @@ class FilmSerializer(serializers.ModelSerializer):
     class Meta:
         model = Film
         fields = [field.name for field in model._meta.fields]
-        fields.extend(["directed_by", "written_by", "starring", "release_year"])
+        fields.extend(
+            ["directed_by", "written_by", "starring", "release_year", "poster_url"]
+        )
 
 
 class PersonSerializer(serializers.ModelSerializer):
@@ -65,8 +67,8 @@ class PersonSaveSerializer(serializers.ModelSerializer):
 
 
 class FilmSaveSerializer(serializers.ModelSerializer):
-    imdb_id = serializers.CharField(max_length=12)
-    tmdb_id = serializers.IntegerField(required=False, allow_null=True)
+    imdb_id = serializers.CharField(max_length=12, allow_null=True, required=False)
+    tmdb_id = serializers.IntegerField()
     title = serializers.CharField(max_length=512)
     original_title = serializers.CharField(
         required=False, allow_null=True, allow_blank=True
@@ -88,6 +90,7 @@ class FilmSaveSerializer(serializers.ModelSerializer):
             "release_date",
             "runtime",
             "synopsis",
+            "poster_path",
         ]
 
     def save(self, validated_data: OrderedDict) -> Film:

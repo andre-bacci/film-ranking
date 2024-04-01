@@ -19,6 +19,7 @@ class TMDBConverter:
             "runtime": movie_info.get("runtime"),
             "synopsis": movie_info.get("overview"),
             "credits": movie_info.get("credits"),
+            "poster_path": movie_info.get("poster_path"),
         }
         return FilmSaveSerializer(data=film_data)
 
