@@ -52,232 +52,345 @@
 			"name": "lists",
 			"item": [
 				{
-					"name": "Compilation List",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/lists/compilations/",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"lists",
-								"compilations",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Compilation Create",
-					"event": [
+					"name": "Compilation",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const responseJson = pm.response.json()\r",
-									"pm.collectionVariables.set(\"compilation_id\", responseJson.id)"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"title\": \"Title\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"name": "Compilation List",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/lists/compilations/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"lists",
+										"compilations",
+										""
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{base_url}}/lists/compilations/",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"lists",
-								"compilations",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Compilation Retrieve",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"title\": \"Title\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/lists/compilations/{{compilation_id}}",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"lists",
-								"compilations",
-								"{{compilation_id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Compilation Destroy",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/lists/compilations/{{compilation_id}}",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"lists",
-								"compilations",
-								"{{compilation_id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "List List",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/lists/compilations",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"lists",
-								"compilations"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "List Create",
-					"event": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const responseJson = pm.response.json()\r",
-									"pm.collectionVariables.set(\"list_id\", responseJson.id)"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"is_ranked\": true,\r\n    \"comment\": \"Comment list\",\r\n    \"list_films\": [\r\n        {\r\n            \"film_id\": 146904,\r\n            \"ranking\": 1,\r\n            \"grade\": 10,\r\n            \"comment\": \"Comment film\"\r\n        }\r\n    ]\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"name": "Compilation Create",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJson = pm.response.json()\r",
+											"pm.collectionVariables.set(\"compilation_id\", responseJson.id)"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
 								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/lists/{{compilation_id}}/",
-							"host": [
-								"{{base_url}}"
 							],
-							"path": [
-								"lists",
-								"{{compilation_id}}",
-								""
-							]
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Title\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/lists/compilations/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"lists",
+										"compilations",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Compilation Calculate Ranking",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJson = pm.response.json()\r",
+											"pm.collectionVariables.set(\"ranking_id\", responseJson.id)"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/lists/compilations/{{compilation_id}}/calculate_ranking/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"lists",
+										"compilations",
+										"{{compilation_id}}",
+										"calculate_ranking",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Compilation Retrieve",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Title\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/lists/compilations/{{compilation_id}}/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"lists",
+										"compilations",
+										"{{compilation_id}}",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Compilation Destroy",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/lists/compilations/{{compilation_id}}/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"lists",
+										"compilations",
+										"{{compilation_id}}",
+										""
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "List Retrieve",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"is_ranked\": true,\r\n    \"comment\": \"Comment list\",\r\n    \"list_films\": [\r\n        {\r\n            \"film_id\": 146904,\r\n            \"ranking\": 1,\r\n            \"grade\": 10,\r\n            \"comment\": \"Comment film\"\r\n        }\r\n    ]\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "Individual List",
+					"item": [
+						{
+							"name": "List List",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/lists/individual_lists/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"lists",
+										"individual_lists",
+										""
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{base_url}}/lists/{{compilation_id}}/{{list_id}}",
-							"host": [
-								"{{base_url}}"
+						{
+							"name": "List Create",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJson = pm.response.json()\r",
+											"pm.collectionVariables.set(\"list_id\", responseJson.id)"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
 							],
-							"path": [
-								"lists",
-								"{{compilation_id}}",
-								"{{list_id}}"
-							]
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"is_ranked\": true,\r\n    \"comment\": \"Comment list\",\r\n    \"compilation_id\": \"{{compilation_id}}\",\r\n    \"list_films\": [\r\n        {\r\n            \"film_id\": 146904,\r\n            \"ranking\": 1,\r\n            \"grade\": 10,\r\n            \"comment\": \"Comment film\"\r\n        },\r\n        {\r\n            \"film_id\": 36095,\r\n            \"ranking\": 2,\r\n            \"grade\": 10,\r\n            \"comment\": \"Comment film 2\"\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/lists/individual_lists/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"lists",
+										"individual_lists",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Retrieve",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"is_ranked\": true,\r\n    \"comment\": \"Comment list\",\r\n    \"list_films\": [\r\n        {\r\n            \"film_id\": 146904,\r\n            \"ranking\": 1,\r\n            \"grade\": 10,\r\n            \"comment\": \"Comment film\"\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/lists/individual_lists/{{list_id}}/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"lists",
+										"individual_lists",
+										"{{list_id}}",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Destroy",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"is_ranked\": true,\r\n    \"comment\": \"Comment list\",\r\n    \"list_films\": [\r\n        {\r\n            \"film_id\": 146904,\r\n            \"ranking\": 1,\r\n            \"grade\": 10,\r\n            \"comment\": \"Comment film\"\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/lists/individual_lists/{{list_id}}/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"lists",
+										"individual_lists",
+										"{{list_id}}",
+										""
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "List Destroy",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"is_ranked\": true,\r\n    \"comment\": \"Comment list\",\r\n    \"list_films\": [\r\n        {\r\n            \"film_id\": 146904,\r\n            \"ranking\": 1,\r\n            \"grade\": 10,\r\n            \"comment\": \"Comment film\"\r\n        }\r\n    ]\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "Ranking",
+					"item": [
+						{
+							"name": "Ranking List",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/lists/rankings/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"lists",
+										"rankings",
+										""
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{base_url}}/lists/{{compilation_id}}/{{list_id}}",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"lists",
-								"{{compilation_id}}",
-								"{{list_id}}"
-							]
+						{
+							"name": "Ranking Retrieve",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/lists/rankings/{{ranking_id}}/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"lists",
+										"rankings",
+										"{{ranking_id}}",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Ranking Destroy",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/lists/rankings/{{ranking_id}}/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"lists",
+										"rankings",
+										"{{ranking_id}}",
+										""
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				}
 			]
 		},
@@ -440,6 +553,11 @@
 		{
 			"key": "film_id",
 			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "ranking_id",
+			"value": "",
 			"type": "string"
 		}
 	]

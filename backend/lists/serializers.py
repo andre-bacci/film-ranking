@@ -1,6 +1,7 @@
 from collections import OrderedDict
 from typing import Iterable
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q, QuerySet
 from rest_framework import serializers
 
@@ -8,7 +9,7 @@ from users.serializers import UserSerializer
 from utils.lists import are_elements_contiguous, first_element_is_valid
 from utils.serializers import NestedSerializerManyRelationHandler
 
-from .models import Compilation, List, ListFilm
+from .models import Compilation, List, ListFilm, Ranking, RankingFilm
 
 
 class CompilationSerializer(serializers.ModelSerializer):
@@ -68,16 +69,26 @@ class NestedListFilmSerializer(serializers.ModelSerializer):
 
 class ListCreateSerializer(serializers.ModelSerializer):
     list_films = NestedListFilmSerializer(many=True)
+    compilation_id = serializers.UUIDField(required=True)
 
     class Meta:
         model = List
-        fields = ["is_ranked", "comment", "list_films"]
+        fields = ["is_ranked", "comment", "list_films", "compilation_id"]
 
     def validate(self, data):
+        try:
+            compilation = Compilation.objects.get(id=data.get("compilation_id"))
+        except ObjectDoesNotExist:
+            raise serializers.ValidationError("Compilation not found")
+        if len(data.get("list_films")) > compilation.maximum_list_length:
+            raise serializers.ValidationError(
+                f"List should not exceed {compilation.maximum_list_length} films"
+            )
+
         if not data.get("is_ranked"):
             return super().validate(data)
         ranking_list = [
-            list_films.get("ranking") for list_films in data.get("list_films")
+            list_film.get("ranking") for list_film in data.get("list_films")
         ]
         if not are_elements_contiguous(ranking_list):
             raise serializers.ValidationError(
@@ -88,14 +99,11 @@ class ListCreateSerializer(serializers.ModelSerializer):
         return super().validate(data)
 
     def create(self, validated_data: OrderedDict, **kwargs):
-        compilation_id = kwargs.get("compilation_id")
         author_id = kwargs.get("author_id")
         data_copy = {**validated_data}
         list_films = data_copy.pop("list_films")
 
-        new_instance = List.objects.create(
-            **data_copy, compilation_id=compilation_id, author_id=author_id
-        )
+        new_instance = List.objects.create(**data_copy, author_id=author_id)
 
         NestedListFilmRelationHandler(new_instance).handle_relation(
             list_films, update_fields=("ranking", "comment", "grade")
@@ -155,3 +163,34 @@ class NestedListFilmRelationHandler(NestedSerializerManyRelationHandler):
             item for item in related_data if item["film_id"] not in current_db_film_ids
         ]
         return records_to_create
+
+
+class RankingFilmSerializer(serializers.ModelSerializer):
+    title = serializers.CharField(source="film.title")
+    directed_by = serializers.CharField(source="film.directed_by")
+    written_by = serializers.CharField(source="film.written_by")
+    starring = serializers.CharField(source="film.starring")
+    release_year = serializers.IntegerField(source="film.release_year")
+
+    class Meta:
+        model = RankingFilm
+        fields = [field.name for field in model._meta.fields]
+        fields.extend(
+            ["title", "directed_by", "written_by", "starring", "release_year"]
+        )
+
+
+class RankingSerializer(serializers.ModelSerializer):
+    ranking_films = RankingFilmSerializer(many=True)
+
+    class Meta:
+        model = Ranking
+        fields = [field.name for field in model._meta.fields]
+        fields.extend(["ranking_films"])
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response["ranking_films"] = sorted(
+            response["ranking_films"], key=lambda x: x["position"]
+        )
+        return response
