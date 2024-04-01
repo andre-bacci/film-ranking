@@ -24,11 +24,11 @@ urlpatterns = [
         RankingView.as_view(actions={"get": "retrieve", "delete": "destroy"}),
     ),
     path(
-        "<str:compilation_id>/",
+        "individual_lists/",
         ListView.as_view(actions={"get": "list", "post": "create"}),
     ),
     path(
-        "<str:compilation_id>/<str:pk>/",
+        "individual_lists/<str:pk>/",
         ListView.as_view(actions={"get": "retrieve", "delete": "destroy"}),
     ),
 ]

@@ -71,24 +71,24 @@ class ListView(
             return ListCreateSerializer
 
     @transaction.atomic
-    def create(self, request, compilation_id, format=None):
+    def create(self, request, format=None):
         user: User = request.user
         if not user:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
+        list_serializer = ListCreateSerializer(data=request.data)
+        list_serializer.is_valid(raise_exception=True)
         if List.exists_by_user_and_compilation(
-            user_id=user.id, compilation_id=compilation_id
+            user_id=user.id,
+            compilation_id=list_serializer.validated_data.get("compilation_id"),
         ):
             return Response(
                 data={"message": "A list for this user and compilation already exists"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        list_serializer = ListCreateSerializer(data=request.data)
-        list_serializer.is_valid(raise_exception=True)
         list: List = list_serializer.create(
             validated_data=list_serializer.validated_data,
-            compilation_id=compilation_id,
             author_id=user.id,
         )
         return Response(ListSerializer(list).data)
@@ -97,6 +97,7 @@ class ListView(
 class RankingView(
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
+    mixins.DestroyModelMixin,
     viewsets.GenericViewSet,
 ):
     queryset = Ranking.objects.all()
