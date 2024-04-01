@@ -1,4 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models.query import QuerySet
 
 from external_services.tmdb.converter import TMDBConverter
 from external_services.tmdb.service import TMDBService
@@ -115,3 +116,24 @@ class FilmService(BaseTMDBService):
             )
 
         return film
+
+    def search_films(self, query: str, page=1, length=5) -> QuerySet[Film]:
+        tmdb_film_search_response = self.tmdb_service.search_films(query, page)
+        films = []
+        results = tmdb_film_search_response.get("results")
+        for index in range(min(len(results), length)):
+            tmdb_film_response = results[index]
+            film = Film.objects.filter(tmdb_id=tmdb_film_response.get("id")).first()
+            if film:
+                films.append(film)
+                continue
+            film = self.create_film(response=tmdb_film_response)
+            tmdb_credit_response = self.tmdb_service.get_film_credits(
+                film_id=film.tmdb_id
+            )
+            self.credit_service.create_film_credits(
+                film_id=film.tmdb_id, credits=tmdb_credit_response
+            )
+            films.append(film)
+
+        return films

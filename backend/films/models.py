@@ -3,6 +3,8 @@ from django.db.models.query import QuerySet
 
 from utils.models import BaseCreatedUpdatedModel, BaseUUIDModel
 
+BASE_FILM_IMAGE_URL = "https://image.tmdb.org/t/p/original"
+
 
 class Film(BaseCreatedUpdatedModel, models.Model):
     tmdb_id = models.IntegerField(primary_key=True)
@@ -13,6 +15,7 @@ class Film(BaseCreatedUpdatedModel, models.Model):
     release_date = models.DateField()
     runtime = models.IntegerField(null=True)
     synopsis = models.TextField(blank=True, null=True)
+    poster_path = models.CharField(blank=True, null=True, max_length=200)
 
     @property
     def release_year(self) -> str:
@@ -41,6 +44,10 @@ class Film(BaseCreatedUpdatedModel, models.Model):
     @property
     def starring(self) -> str:
         return Person.convert_person_queryset_to_string(self.starring_queryset)
+
+    @property
+    def poster_url(self) -> str:
+        return f"{BASE_FILM_IMAGE_URL}{self.poster_path}" if self.poster_path else None
 
     def get_credited_people_by_role(self, role) -> "QuerySet[Person]":
         # TODO: Make query more efficient
