@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 import os
 import sys
+from datetime import timedelta
 from pathlib import Path
 
 # Uses django-environ to set up setting with environment variables
@@ -34,6 +35,9 @@ env = environ.FileAwareEnv(
     TMDB_API_TOKEN=(str, ""),
     TMDB_REQUEST_TIMEOUT=(int, 10),
     DJANGO_SECRET_KEY=(str, "insecure_secret_key"),
+    # JWT
+    JWT_SIGNING_KEY=(str, "jwtsigningkey"),
+    JWT_ACCESS_TOKEN_LIFETIME_SECS=(int, 86400),
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -167,3 +171,12 @@ REST_FRAMEWORK = {
 
 TMDB_API_TOKEN = env.str("TMDB_API_TOKEN")
 TMDB_REQUEST_TIMEOUT = env.int("TMDB_REQUEST_TIMEOUT")
+
+
+# JWT settings
+SIMPLE_JWT = {
+    "SIGNING_KEY": env.str("JWT_SIGNING_KEY"),
+    "ACCESS_TOKEN_LIFETIME": timedelta(
+        seconds=env.int("JWT_ACCESS_TOKEN_LIFETIME_SECS")
+    ),
+}
