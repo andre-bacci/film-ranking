@@ -15,7 +15,10 @@ from .serializers import (
 
 
 class CompilationView(
-    mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.DestroyModelMixin,
+    viewsets.GenericViewSet,
 ):
     queryset = Compilation.objects.all()
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -40,7 +43,10 @@ class CompilationView(
 
 
 class ListView(
-    mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.DestroyModelMixin,
+    viewsets.GenericViewSet,
 ):
     queryset = List.objects.all()
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -57,6 +63,15 @@ class ListView(
         user: User = request.user
         if not user:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        if List.exists_by_user_and_compilation(
+            user_id=user.id, compilation_id=compilation_id
+        ):
+            return Response(
+                data={"message": "A list for this user and compilation already exists"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         list_serializer = ListCreateSerializer(data=request.data)
         list_serializer.is_valid(raise_exception=True)
         list: List = list_serializer.create(

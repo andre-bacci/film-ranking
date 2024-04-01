@@ -18,7 +18,7 @@ class Compilation(BaseUUIDModel, BaseCreatedUpdatedModel, models.Model):
 class List(BaseUUIDModel, BaseCreatedUpdatedModel, models.Model):
     compilation = models.ForeignKey(
         to=Compilation, related_name="lists", on_delete=models.CASCADE
-    )
+    )  # TODO: Allow null
     films = models.ManyToManyField(Film, through="ListFilm")
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE
@@ -31,6 +31,12 @@ class List(BaseUUIDModel, BaseCreatedUpdatedModel, models.Model):
 
     def __str__(self) -> str:
         return f"{self.author.get_full_name()} - {self.compilation}"
+
+    @staticmethod
+    def exists_by_user_and_compilation(user_id, compilation_id) -> bool:
+        return List.objects.filter(
+            author_id=user_id, compilation_id=compilation_id
+        ).exists()
 
 
 class ListFilm(BaseUUIDModel, BaseCreatedUpdatedModel, models.Model):

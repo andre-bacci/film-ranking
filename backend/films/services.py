@@ -74,6 +74,12 @@ class FilmService(BaseTMDBService):
         self.person_service = PersonService()
         super().__init__()
 
+    def get_film_id_type(self, film_id) -> str:
+        if "tt" in film_id:
+            return "imdb_id"
+        else:
+            return "tmdb_id"
+
     def create_film(self, response) -> Film:
         film_id = response.get("id")
         film_serializer = self.tmdb_converter.convert_movie_info_to_film_serializer(
@@ -86,20 +92,26 @@ class FilmService(BaseTMDBService):
             self.credit_service.create_film_credits(film_id=film_id, credits=credits)
         return film
 
-    def get_film(self, imdb_id) -> Film:
-        # TODO: Allow searching for imdb_id and tmdb_id
+    def get_film(self, film_id) -> Film:
+        film_id_type = self.get_film_id_type(film_id)
+
         try:
-            film = Film.objects.get(imdb_id=imdb_id)
+            if film_id_type == "imdb_id":
+                film = Film.objects.get(imdb_id=film_id)
+            elif film_id_type == "tmdb_id":
+                film = Film.objects.get(tmdb_id=film_id)
+            else:
+                raise Exception("Invalid film id")
         except ObjectDoesNotExist:
             tmdb_film_response = self.tmdb_service.get_film_details(
-                film_id=imdb_id, append_to_response="credits"
+                film_id=film_id, append_to_response="credits"
             )
             film = self.create_film(response=tmdb_film_response)
 
         if not film.directed_by_queryset or not film.written_by_queryset:
-            tmdb_credit_response = self.tmdb_service.get_film_credits(film_id=imdb_id)
+            tmdb_credit_response = self.tmdb_service.get_film_credits(film_id=film_id)
             self.credit_service.create_film_credits(
-                film_id=imdb_id, credits=tmdb_credit_response
+                film_id=film_id, credits=tmdb_credit_response
             )
 
         return film
