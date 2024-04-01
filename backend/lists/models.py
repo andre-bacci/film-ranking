@@ -39,7 +39,7 @@ class Compilation(BaseUUIDModel, BaseCreatedUpdatedModel, models.Model):
         for position, punctuation in enumerate(punctuations):
             average_grade = (
                 sum(punctuation["grades"]) / len(punctuation["grades"])
-                if punctuation["grades"]
+                if len(punctuation["grades"])
                 else None
             )
             RankingFilm.objects.create(
