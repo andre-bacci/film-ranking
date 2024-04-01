@@ -32,9 +32,10 @@ class CompilationView(
 
     @transaction.atomic
     def create(self, request, format=None):
-        user: User = request.user
+        user = request.user
         if not user:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
+        user = User.objects.get(id=user.id)
         compilation_serializer = CompilationCreateSerializer(data=request.data)
         compilation_serializer.is_valid(raise_exception=True)
         compilation: Compilation = compilation_serializer.save()
