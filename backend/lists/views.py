@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from rest_framework import mixins, status, viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
@@ -5,12 +6,13 @@ from rest_framework.response import Response
 
 from users.models import User
 
-from .models import Compilation, List
+from .models import Compilation, List, Ranking
 from .serializers import (
     CompilationCreateSerializer,
     CompilationSerializer,
     ListCreateSerializer,
     ListSerializer,
+    RankingSerializer,
 )
 
 
@@ -41,6 +43,15 @@ class CompilationView(
         compilation: Compilation = compilation_serializer.save()
         compilation.owners.add(user)
         return Response(CompilationSerializer(compilation).data)
+
+    @transaction.atomic
+    def calculate_ranking(self, request, pk, format=None):
+        try:
+            compilation = Compilation.objects.get(pk=pk)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        ranking = compilation.calculate_ranking()
+        return Response(data=RankingSerializer(ranking).data)
 
 
 class ListView(
@@ -81,3 +92,14 @@ class ListView(
             author_id=user.id,
         )
         return Response(ListSerializer(list).data)
+
+
+class RankingView(
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    viewsets.GenericViewSet,
+):
+    queryset = Ranking.objects.all()
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    search_fields = ["title"]
+    serializer_class = RankingSerializer

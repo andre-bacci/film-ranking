@@ -8,7 +8,7 @@ from users.serializers import UserSerializer
 from utils.lists import are_elements_contiguous, first_element_is_valid
 from utils.serializers import NestedSerializerManyRelationHandler
 
-from .models import Compilation, List, ListFilm
+from .models import Compilation, List, ListFilm, Ranking, RankingFilm
 
 
 class CompilationSerializer(serializers.ModelSerializer):
@@ -155,3 +155,27 @@ class NestedListFilmRelationHandler(NestedSerializerManyRelationHandler):
             item for item in related_data if item["film_id"] not in current_db_film_ids
         ]
         return records_to_create
+
+
+class RankingFilmSerializer(serializers.ModelSerializer):
+    title = serializers.CharField(source="film.title")
+    directed_by = serializers.CharField(source="film.directed_by")
+    written_by = serializers.CharField(source="film.written_by")
+    starring = serializers.CharField(source="film.starring")
+    release_year = serializers.IntegerField(source="film.release_year")
+
+    class Meta:
+        model = RankingFilm
+        fields = [field.name for field in model._meta.fields]
+        fields.extend(
+            ["title", "directed_by", "written_by", "starring", "release_year"]
+        )
+
+
+class RankingSerializer(serializers.ModelSerializer):
+    ranking_films = RankingFilmSerializer(many=True)
+
+    class Meta:
+        model = Ranking
+        fields = [field.name for field in model._meta.fields]
+        fields.extend(["ranking_films"])
