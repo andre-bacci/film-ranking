@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 
-import { Home } from "pages";
+import { Home, Login } from "pages";
 
 function Routers() {
   const { pathname } = useLocation();
@@ -19,6 +19,7 @@ function Routers() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/login" element={<Login />} />
     </Routes>
   );
 }

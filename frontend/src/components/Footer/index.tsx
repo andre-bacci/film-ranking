@@ -1,11 +1,11 @@
+import "./styles.scss";
+
 export default function Footer() {
   return (
-    <>
-      <header className="header">
-        <div className="flex items-center">
-          <p className="font-bold">Footer</p>
-        </div>
-      </header>
-    </>
+    <div className="footer">
+      <div className="flex items-center">
+        <p>Film data from TMDB</p>
+      </div>
+    </div>
   );
 }
