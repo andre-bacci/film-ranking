@@ -3,7 +3,7 @@ export default function Header() {
         <>
             <header className="header">
                 <div className="flex items-center">
-                    <p>Header</p>
+                    <p className="font-bold">Header</p>
                 </div>
             </header>
         </>
