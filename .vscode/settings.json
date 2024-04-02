@@ -1,4 +1,5 @@
 {
   "editor.formatOnSave": true,
-  "eslint.codeActionsOnSave.rules": null
+  "eslint.codeActionsOnSave.rules": null,
+  "editor.tabSize": 2
 }
