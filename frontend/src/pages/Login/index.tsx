@@ -59,7 +59,7 @@ export default function Login() {
         <div className="login-wrapper">
           <Input
             name="username"
-            label="Email"
+            label="Username"
             type="text"
             value={formik.values.username}
             onChange={formik.handleChange}
