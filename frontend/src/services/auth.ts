@@ -2,7 +2,6 @@ import { LoginProps } from "pages/Login/types";
 import { get, post } from "./axios";
 import { toast } from "react-toastify";
 import { User } from "store/features/auth/types";
-import Cookies from "js-cookie";
 
 export class AuthService {
 
@@ -11,12 +10,13 @@ export class AuthService {
   }
 
   async login(data: LoginProps) {
-    const response = await post("users/login/", data).catch((error) => toast.error(error))
-    Cookies.set("access_token", response.access)
-    Cookies.set("refresh_token", response.refresh)
+    const response = await post("users/login/", data).catch((error) => toast.error(error));
+    localStorage.setItem("access_token", response.access);
+    localStorage.setItem("refresh_token", response.refresh);
+    return response
   }
 
-  async retrieveLogged(): Promise<User> {
+  async retrieveLogged(): Promise<any> {
     return get("users/retrieve-self/")
   }
 }

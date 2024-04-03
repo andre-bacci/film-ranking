@@ -2,9 +2,14 @@ import axios, { AxiosResponse } from "axios";
 
 let api = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
-  withCredentials: true,
-  xsrfCookieName: "csrftoken",
-  xsrfHeaderName: "X-CSRFToken",
+});
+
+api.interceptors.request.use((config) => {
+  const access = localStorage.getItem("access_token");
+  if (access) {
+    config.headers.Authorization = `Bearer ${access}`;
+  }
+  return config;
 });
 
 const get = async (url: string, config?: any) => {

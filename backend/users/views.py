@@ -12,29 +12,6 @@ from .serializers import UserSerializer
 class Login(TokenObtainPairView):
     serializer_class = DefaultTokenObtainPairSerializer
 
-    # def _set_authentication_cookies(self, response: Response):
-    #     data = response.data
-    #     access = data.get("access")
-    #     refresh = data.get("refresh")
-    #     response.data = None
-
-    #     response.set_cookie(
-    #         "access_token",
-    #         access,
-    #         httponly=True,
-    #     )
-    #     response.set_cookie(
-    #         "refresh_token",
-    #         refresh,
-    #         httponly=True,
-    #     )
-    #     return response
-
-    # def post(self, request, format=None):
-    #     response = super().post(request)
-    #     self._set_authentication_cookies(response)
-    #     return response
-
 
 class UserView(viewsets.GenericViewSet):
     def retrieve_self(self, request, format=None):

@@ -29,10 +29,16 @@ export default function Login() {
   const login = async (values: LoginProps) => {
     await authService.login(values);
     const loggedUser = await authService.retrieveLogged();
+    console.log(loggedUser);
     if (loggedUser)
       dispatch(
         setLoggedIn({
-          user,
+          user: {
+            id: loggedUser.id,
+            email: loggedUser.email,
+            isActive: true,
+            name: loggedUser.full_name,
+          },
         })
       );
   };
