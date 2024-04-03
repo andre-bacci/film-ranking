@@ -1,16 +1,13 @@
 from rest_framework import status, viewsets
 from rest_framework.response import Response
-from rest_framework_simplejwt.serializers import (
-    TokenObtainPairSerializer as DefaultTokenObtainPairSerializer,
-)
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .models import User
-from .serializers import UserSerializer
+from .serializers import EmailTokenObtainPairSerializer, UserSerializer
 
 
 class Login(TokenObtainPairView):
-    serializer_class = DefaultTokenObtainPairSerializer
+    serializer_class = EmailTokenObtainPairSerializer
 
 
 class UserView(viewsets.GenericViewSet):
