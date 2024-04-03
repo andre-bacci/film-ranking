@@ -1,5 +1,5 @@
 import Home from "./Home";
 import Login from "./Login";
-import Lists from "./Lists";
+import { ListIndividualLists } from "./IndividualLists";
 
-export { Home, Login, Lists };
+export { Home, Login, ListIndividualLists };

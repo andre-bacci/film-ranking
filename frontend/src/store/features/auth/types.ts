@@ -1,9 +1,4 @@
-export interface User {
-  id: string;
-  name: string;
-  isActive: boolean;
-  email: string;
-}
+import { User } from "models/User";
 
 export interface AuthState {
   user?: User;

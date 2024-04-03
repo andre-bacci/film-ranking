@@ -1,7 +1,7 @@
 import { LoginProps } from "pages/Login/types";
 import { get, post } from "./axios";
 import { toast } from "react-toastify";
-import { User } from "store/features/auth/types";
+import { UserData } from "models/User";
 
 export class AuthService {
 
@@ -16,7 +16,7 @@ export class AuthService {
     return response
   }
 
-  async retrieveLogged(): Promise<any> {
+  async retrieveLogged(): Promise<UserData> {
     return get("users/retrieve-self/")
   }
 }
