@@ -33,18 +33,27 @@ class ListFilmSerializer(serializers.ModelSerializer):
     written_by = serializers.CharField(source="film.written_by")
     starring = serializers.CharField(source="film.starring")
     release_year = serializers.IntegerField(source="film.release_year")
+    poster_url = serializers.CharField(source="film.poster_url")
 
     class Meta:
         model = ListFilm
         fields = [field.name for field in model._meta.fields]
         fields.extend(
-            ["title", "directed_by", "written_by", "starring", "release_year"]
+            [
+                "title",
+                "directed_by",
+                "written_by",
+                "starring",
+                "release_year",
+                "poster_url",
+            ]
         )
 
 
 class ListSerializer(serializers.ModelSerializer):
     author = UserSerializer()
     list_films = ListFilmSerializer(many=True)
+    compilation = CompilationSerializer()
 
     class Meta:
         model = List

@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { setLoggedIn } from "store/features/auth/authSlice";
 import { useFormik } from "formik";
 import { AuthService } from "services/auth";
+import { User } from "models/User";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -29,23 +30,17 @@ export default function Login() {
   const login = async (values: LoginProps) => {
     await authService.login(values);
     const loggedUser = await authService.retrieveLogged();
-    console.log(loggedUser);
     if (loggedUser)
       dispatch(
         setLoggedIn({
-          user: {
-            id: loggedUser.id,
-            email: loggedUser.email,
-            isActive: true,
-            name: loggedUser.full_name,
-          },
+          user: new User(loggedUser),
         })
       );
   };
 
   useEffect(() => {
-    if (user) navigate("/");
-  });
+    if (user) navigate("/lists");
+  }, [user, navigate]);
 
   const formik = useFormik({
     initialValues,

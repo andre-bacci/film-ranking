@@ -1,0 +1,36 @@
+.list-film-wrapper {
+  padding: 1rem 0;
+  display: flex;
+  flex-direction: row;
+
+  .poster-wrapper {
+    width: 6rem;
+    min-height: 9rem;
+    margin: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: grey;
+    border-radius: 0.25rem;
+
+    img {
+      border-radius: 0.25rem;
+    }
+
+    .no-image {
+      text-align: center;
+    }
+  }
+
+  .list-film-info {
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .list-film-title {
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+  }
+}
