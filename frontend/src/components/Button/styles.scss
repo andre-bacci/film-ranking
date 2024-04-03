@@ -1,0 +1,17 @@
+.button-component {
+  &.button-box {
+    padding: 0.25rem 1rem;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 0.25rem;
+  }
+
+  &.button-text {
+    padding: 0.25rem;
+  }
+
+  &.button-disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+  }
+}
