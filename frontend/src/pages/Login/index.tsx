@@ -17,12 +17,12 @@ export default function Login() {
   const authService = new AuthService();
 
   const initialValues: LoginProps = {
-    email: "",
+    username: "",
     password: "",
   };
 
   const LoginSchema = Yup.object().shape({
-    email: Yup.string().required("Campo obrigatório"),
+    username: Yup.string().required("Campo obrigatório"),
     password: Yup.string().required("Campo obrigatório"),
   });
 
@@ -52,10 +52,10 @@ export default function Login() {
       <form onSubmit={formik.handleSubmit}>
         <div className="login-wrapper">
           <Input
-            name="email"
+            name="username"
             label="Email"
             type="text"
-            value={formik.values.email}
+            value={formik.values.username}
             onChange={formik.handleChange}
           />
           <Input

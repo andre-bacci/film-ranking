@@ -52,8 +52,8 @@ SECRET_KEY = env.str("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ["localhost"]
+CORS_ALLOWED_ORIGINS = ["http://localhost:3001"]
 
 # Application definition
 
@@ -83,8 +83,6 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
-
-CORS_ALLOWED_ORIGINS = ["http://localhost:3001"]
 
 ROOT_URLCONF = "filmranking.urls"
 
@@ -183,3 +181,6 @@ SIMPLE_JWT = {
         seconds=env.int("JWT_ACCESS_TOKEN_LIFETIME_SECS")
     ),
 }
+
+USE_SECURE_COOKIES = False
+CSRF_COOKIE_SECURE = False

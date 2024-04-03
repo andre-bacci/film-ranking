@@ -7,19 +7,6 @@ let api = axios.create({
   xsrfHeaderName: "X-CSRFToken",
 });
 
-api.interceptors.request.use(
-  (config: any) => {
-    const newConfig = {
-      ...config,
-      headers: {
-        ...config.headers,
-      },
-    };
-    return newConfig;
-  },
-  (error: any) => Promise.reject(error)
-);
-
 const get = async (url: string, config?: any) => {
   const response: AxiosResponse = await api.get(url, config);
   return response.data;
