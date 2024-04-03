@@ -3,6 +3,7 @@ import "./styles.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setLogout } from "store/features/auth/authSlice";
+import { Button } from "components";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -14,11 +15,20 @@ export default function Header() {
       <div className="flex items-center">
         <p className="font-bold logo text-xl">Film Ranking Application</p>
         <div className="menus">
-          {user?.id ? (
-            <button onClick={() => dispatch(setLogout())}>{user.name}</button>
+          {user ? (
+            <>
+              <Button styled="text">{user.name}</Button>
+              <Button styled="text">Lists</Button>
+              <Button styled="text">Compilations</Button>
+              <Button styled="text" onClick={() => dispatch(setLogout())}>
+                Logout
+              </Button>
+            </>
           ) : (
             <div className="text-lg">
-              <button onClick={() => navigate("/login")}>Login</button>
+              <Button styled="text" onClick={() => navigate("/login")}>
+                Login
+              </Button>
             </div>
           )}
         </div>

@@ -5,7 +5,7 @@ import clsx from "clsx";
 export default function Button({
   children,
   onClick,
-  style = "box",
+  styled = "box",
   type = "button",
   disabled = false,
   cssClass,
@@ -13,8 +13,9 @@ export default function Button({
   return (
     <button
       className={clsx(`button-component ${cssClass}`, {
-        "button-text": style === "text",
-        "button-box": style === "box",
+        "button-text": styled === "text",
+        "button-box": styled === "box",
+        "button-disabled": disabled,
       })}
       type={type}
       onClick={onClick}

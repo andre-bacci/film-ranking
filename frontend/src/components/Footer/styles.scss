@@ -12,4 +12,8 @@
   background-color: white;
   border-top-width: 1px;
   border-style: solid;
+
+  p {
+    @apply font-thin;
+  }
 }

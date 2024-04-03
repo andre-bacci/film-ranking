@@ -8,11 +8,13 @@ import * as Yup from "yup";
 import { useEffect } from "react";
 import { setLoggedIn } from "store/features/auth/authSlice";
 import { useFormik } from "formik";
+import { AuthService } from "services/auth";
 
 export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.auth);
+  const authService = new AuthService();
 
   const initialValues: LoginProps = {
     email: "",
@@ -24,17 +26,15 @@ export default function Login() {
     password: Yup.string().required("Campo obrigatório"),
   });
 
-  const login = (values: LoginProps) => {
-    dispatch(
-      setLoggedIn({
-        user: {
-          id: "q",
-          email: values.email,
-          name: "Nome da silva",
-          isActive: true,
-        },
-      })
-    );
+  const login = async (values: LoginProps) => {
+    await authService.login(values);
+    const loggedUser = await authService.retrieveLogged();
+    if (loggedUser)
+      dispatch(
+        setLoggedIn({
+          user,
+        })
+      );
   };
 
   useEffect(() => {
@@ -50,23 +50,29 @@ export default function Login() {
   return (
     <div className="login-box">
       <form onSubmit={formik.handleSubmit}>
-        <Input
-          name="email"
-          label="Email"
-          type="text"
-          value={formik.values.email}
-          onChange={formik.handleChange}
-        />
-        <Input
-          name="password"
-          label="Password"
-          type="password"
-          value={formik.values.password}
-          onChange={formik.handleChange}
-        />
-        <Button cssClass="login-button" type="submit">
-          <div>Log In</div>
-        </Button>
+        <div className="login-wrapper">
+          <Input
+            name="email"
+            label="Email"
+            type="text"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+          />
+          <Input
+            name="password"
+            label="Password"
+            type="password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+          />
+          <Button
+            cssClass="login-button"
+            type="submit"
+            disabled={!(formik.isValid && formik.dirty)}
+          >
+            <div>Log In</div>
+          </Button>
+        </div>
       </form>
     </div>
   );
