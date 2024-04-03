@@ -7,6 +7,7 @@ export interface ListFilmData {
   ranking: number;
   grade: number;
   comment: string;
+  poster_url: string;
 }
 
 export class ListFilm {
@@ -18,6 +19,7 @@ export class ListFilm {
   ranking: number;
   grade: number;
   comment: string;
+  posterUrl: string;
 
   constructor(data: ListFilmData) {
     this.title = data.title;
@@ -28,5 +30,6 @@ export class ListFilm {
     this.ranking = data.ranking;
     this.grade = data.grade;
     this.comment = data.comment;
+    this.posterUrl = data.poster_url;
   }
 }
