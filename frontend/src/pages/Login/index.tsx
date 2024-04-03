@@ -44,8 +44,8 @@ export default function Login() {
   };
 
   useEffect(() => {
-    if (user) navigate("/");
-  });
+    if (user) navigate("/lists");
+  }, [user, navigate]);
 
   const formik = useFormik({
     initialValues,

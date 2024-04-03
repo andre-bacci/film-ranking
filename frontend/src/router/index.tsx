@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 
-import { Home, Login } from "pages";
+import { Home, Login, Lists } from "pages";
+import PrivateRoute from "./privateRoute";
 
 function Routers() {
   const { pathname } = useLocation();
@@ -20,6 +21,9 @@ function Routers() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
+      <Route path="" element={<PrivateRoute />}>
+        <Route path="/lists" element={<Lists />} />
+      </Route>
     </Routes>
   );
 }
