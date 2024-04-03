@@ -18,8 +18,12 @@ export default function Header() {
           {user ? (
             <>
               <Button styled="text">{user.name}</Button>
-              <Button styled="text">Lists</Button>
-              <Button styled="text">Compilations</Button>
+              <Button styled="text" onClick={() => navigate("/lists")}>
+                Lists
+              </Button>
+              <Button styled="text" onClick={() => navigate("/compilations")}>
+                Compilations
+              </Button>
               <Button styled="text" onClick={() => dispatch(setLogout())}>
                 Logout
               </Button>

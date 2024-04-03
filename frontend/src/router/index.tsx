@@ -4,6 +4,7 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import { Home, Login } from "pages";
 import PrivateRoute from "./privateRoute";
 import ListRoutes from "./Lists";
+import CompilationRoutes from "./Compilations";
 
 function Routers() {
   const { pathname } = useLocation();
@@ -24,6 +25,7 @@ function Routers() {
       <Route path="/login" element={<Login />} />
       <Route path="" element={<PrivateRoute />}>
         <Route path="/lists/*" element={<ListRoutes />} />
+        <Route path="/compilations/*" element={<CompilationRoutes />} />
       </Route>
     </Routes>
   );
