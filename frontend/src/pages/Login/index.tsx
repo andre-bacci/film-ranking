@@ -6,7 +6,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store";
 import * as Yup from "yup";
 import { useEffect } from "react";
-import { setLoggedIn } from "store/features/auth/authSlice";
+import {
+  setAccessToken,
+  setLoggedIn,
+  setRefreshToken,
+} from "store/features/auth/authSlice";
 import { useFormik } from "formik";
 import { AuthService } from "services/auth";
 import { User } from "models/User";
@@ -28,14 +32,12 @@ export default function Login() {
   });
 
   const login = async (values: LoginProps) => {
-    await authService.login(values);
+    const tokens = await authService.login(values);
+    if (!tokens) return;
+    dispatch(setAccessToken(tokens.access));
+    dispatch(setRefreshToken(tokens.refresh));
     const loggedUser = await authService.retrieveLogged();
-    if (loggedUser)
-      dispatch(
-        setLoggedIn({
-          user: new User(loggedUser),
-        })
-      );
+    if (loggedUser && tokens) dispatch(setLoggedIn(new User(loggedUser)));
   };
 
   useEffect(() => {

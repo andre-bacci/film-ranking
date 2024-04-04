@@ -7,10 +7,14 @@ import { store } from "./store";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistor } from "store";
+import { injectStore } from "services/axios";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
+
+injectStore(store);
+
 root.render(
   <React.StrictMode>
     <Provider store={store}>

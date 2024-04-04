@@ -1,12 +1,21 @@
 import axios, { AxiosResponse } from "axios";
 import { AuthService } from "./auth";
+import { Store } from "redux";
+import { RootState } from "store";
+import { setAccessToken, setIsRefreshing } from "store/features/auth/authSlice";
 
 let api = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
 });
 
+let store: Store<RootState>;
+
+export const injectStore = (_store: Store<RootState>) => {
+  store = _store;
+};
+
 api.interceptors.request.use((config) => {
-  const access = localStorage.getItem("access_token");
+  const access = store.getState().auth.accessToken;
   if (access) {
     config.headers.Authorization = `Bearer ${access}`;
   }
@@ -30,13 +39,14 @@ api.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-      const refreshToken = localStorage.getItem("refresh_token");
+    if (error.response.status === 401 && !store.getState().auth.isRefreshing) {
+      store.dispatch(setIsRefreshing(true));
+      const refreshToken = store.getState().auth.refreshToken;
       if (refreshToken)
         return authService.refreshLogin(refreshToken).then((res) => {
           if (res.status === 201) {
-            localStorage.setItem("access_token", res.data);
+            store.dispatch(setIsRefreshing(false));
+            store.dispatch(setAccessToken(res.data));
             return axios(originalRequest);
           }
         });
