@@ -2,9 +2,11 @@ import { ListService } from "services/lists";
 import "./styles.scss";
 import { useEffect, useState } from "react";
 import { Compilation } from "models/Compilation";
-import { CompilationComponent } from "components";
+import { Button, CompilationComponent } from "components";
+import { useNavigate } from "react-router-dom";
 
 export default function ListCompilations() {
+  const navigate = useNavigate();
   const listService = new ListService();
   const [compilations, setCompilations] = useState<Compilation[]>([]);
 
@@ -20,6 +22,11 @@ export default function ListCompilations() {
         {compilations.map((compilation) => (
           <CompilationComponent compilation={compilation} />
         ))}
+        <div className="add-compilation">
+          <Button cssClass="add-button" onClick={() => navigate("new")}>
+            New Compilation
+          </Button>
+        </div>
       </div>
     </>
   );

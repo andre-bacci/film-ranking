@@ -27,8 +27,8 @@ export default function Login() {
   };
 
   const LoginSchema = Yup.object().shape({
-    email: Yup.string().required("Campo obrigatório"),
-    password: Yup.string().required("Campo obrigatório"),
+    email: Yup.string().required("Required"),
+    password: Yup.string().required("Required"),
   });
 
   const login = async (values: LoginProps) => {
