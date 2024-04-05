@@ -34,13 +34,47 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/films/{{film_id}}",
+							"raw": "{{base_url}}/films/{{film_id}}/",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"films",
-								"{{film_id}}"
+								"{{film_id}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Film Search",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/films/search/?search=Kimitachi wa dou&page=1&length=5",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"films",
+								"search",
+								""
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "Kimitachi wa dou"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "length",
+									"value": "5"
+								}
 							]
 						}
 					},
@@ -108,6 +142,48 @@
 									"path": [
 										"lists",
 										"compilations",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Compilation Update",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJson = pm.response.json()\r",
+											"pm.collectionVariables.set(\"compilation_id\", responseJson.id)"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Title\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/lists/compilations/{{compilation_id}}/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"lists",
+										"compilations",
+										"{{compilation_id}}",
 										""
 									]
 								}
@@ -259,6 +335,48 @@
 									"path": [
 										"lists",
 										"individual_lists",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Update",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJson = pm.response.json()\r",
+											"pm.collectionVariables.set(\"list_id\", responseJson.id)"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"is_ranked\": true,\r\n    \"comment\": \"Comment list\",\r\n    \"compilation_id\": \"{{compilation_id}}\",\r\n    \"list_films\": [\r\n        {\r\n            \"film_id\": 146904,\r\n            \"ranking\": 1,\r\n            \"grade\": 10,\r\n            \"comment\": \"Comment film\"\r\n        },\r\n        {\r\n            \"film_id\": 36095,\r\n            \"ranking\": 2,\r\n            \"grade\": 10,\r\n            \"comment\": \"Comment film 2\"\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/lists/individual_lists/{{list_id}}/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"lists",
+										"individual_lists",
+										"{{list_id}}",
 										""
 									]
 								}
@@ -527,7 +645,7 @@
 	"variable": [
 		{
 			"key": "base_url",
-			"value": "127.0.0.1:8001/api",
+			"value": "localhost:8000/api",
 			"type": "string"
 		},
 		{
