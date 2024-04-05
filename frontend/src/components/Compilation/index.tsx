@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 export default function CompilationComponent({
   compilation,
   isList = false,
+  onDelete,
 }: CompilationProps) {
   const navigate = useNavigate();
 
@@ -24,6 +25,7 @@ export default function CompilationComponent({
           <Button onClick={() => navigate(`${compilation.id}/edit`)}>
             Edit
           </Button>
+          {onDelete && <Button onClick={() => onDelete()}>Delete</Button>}
         </div>
       )}
     </div>

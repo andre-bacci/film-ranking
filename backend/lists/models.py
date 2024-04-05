@@ -67,6 +67,7 @@ class List(BaseUUIDModel, BaseCreatedUpdatedModel, models.Model):
 
     class Meta:
         unique_together = ["compilation", "author"]
+        ordering = ["created_at"]
 
     def __str__(self) -> str:
         return f"{self.author.get_full_name()} - {self.compilation}"

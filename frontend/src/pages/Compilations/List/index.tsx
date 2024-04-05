@@ -11,16 +11,29 @@ export default function ListCompilations() {
   const [compilations, setCompilations] = useState<Compilation[]>([]);
 
   useEffect(() => {
+    getCompilations();
+  }, []);
+
+  const getCompilations = () => {
     listService
       .listCompilations()
       .then((response) => setCompilations(response));
-  }, []);
+  };
+
+  const deleteCompilation = async (compilationId: string) => {
+    await listService.deleteCompilation(compilationId);
+    await getCompilations();
+  };
 
   return (
     <>
       <div className="list-compilations">
         {compilations.map((compilation) => (
-          <CompilationComponent compilation={compilation} isList />
+          <CompilationComponent
+            compilation={compilation}
+            isList
+            onDelete={() => deleteCompilation(compilation.id)}
+          />
         ))}
         <div className="add-compilation">
           <Button cssClass="add-button" onClick={() => navigate("new")}>

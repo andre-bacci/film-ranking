@@ -1,5 +1,5 @@
 import { IndividualList, IndividualListData } from "models/IndividualList";
-import { get, post, put } from "./axios";
+import { get, post, put, remove } from "./axios";
 import { Compilation, CompilationData } from "models/Compilation";
 import { CompilationCreateData, IndividualListCreateData } from "./types";
 
@@ -31,6 +31,10 @@ export class ListService {
     )
   }
 
+  async deleteIndividualList(listId: string): Promise<null> {
+    return remove(`lists/individual_lists/${listId}`)
+  }
+
   async listCompilations(): Promise<Compilation[]> {
     return get("lists/compilations/")
       .then(
@@ -55,5 +59,9 @@ export class ListService {
     return put(`lists/compilations/${compilationId}/`, data).then(
       (response: CompilationData) => new Compilation(response)
     )
+  }
+
+  async deleteCompilation(compilationId: string): Promise<null> {
+    return remove(`lists/compilations/${compilationId}`)
   }
 }

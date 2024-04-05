@@ -4,12 +4,13 @@ import { Button, Input } from "components";
 import { CompilationCreateData } from "services/types";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { Compilation } from "models/Compilation";
 
 export default function CompilationForm() {
   const listService = new ListService();
+  const navigate = useNavigate();
 
   const { compilationId } = useParams();
   const isEditing = useMemo(() => !!compilationId, [compilationId]);
@@ -25,10 +26,14 @@ export default function CompilationForm() {
 
   const sendCompilation = async (values: CompilationCreateData) => {
     if (!isEditing) {
-      await listService.createCompilation(values);
+      await listService
+        .createCompilation(values)
+        .then(() => navigate("/compilations"));
     } else if (compilationId) {
-      await listService.updateCompilation(values, compilationId);
-    }
+      await listService
+        .updateCompilation(values, compilationId)
+        .then(() => navigate("/compilations"));
+    } else return;
   };
 
   useEffect(() => {

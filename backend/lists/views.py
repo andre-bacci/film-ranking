@@ -1,6 +1,6 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
-from rest_framework import mixins, status, viewsets
+from rest_framework import filters, mixins, status, viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
@@ -25,6 +25,9 @@ class CompilationView(
     queryset = Compilation.objects.all()
     permission_classes = [IsAuthenticatedOrReadOnly]
     search_fields = ["title"]
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ["created_at"]
+    ordering = ["created_at"]
 
     def get_serializer_class(self):
         if self.action in ["list", "retrieve"]:
@@ -87,6 +90,9 @@ class ListView(
     queryset = List.objects.all()
     permission_classes = [IsAuthenticatedOrReadOnly]
     search_fields = ["title"]
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ["created_at"]
+    ordering = ["created_at"]
 
     def get_serializer_class(self):
         if self.action in ["list", "retrieve"]:

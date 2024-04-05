@@ -18,14 +18,27 @@ export default function RetrieveCompilation() {
       .then((response) => setCompilation(response));
   }, []);
 
+  const deleteCompilation = async (compilationId: string) => {
+    await listService.deleteCompilation(compilationId);
+    navigate("/compilations");
+  };
+
   return (
     <>
       <div className="compilation-detail">
         {compilation && <CompilationComponent compilation={compilation} />}
-        <div className="add-compilation">
+        <div className="button-wrapper">
           <Button cssClass="add-button" onClick={() => navigate("edit")}>
             Edit
           </Button>
+          {compilation && (
+            <Button
+              cssClass="delete-button"
+              onClick={() => deleteCompilation(compilation.id)}
+            >
+              Delete
+            </Button>
+          )}
         </div>
       </div>
     </>
