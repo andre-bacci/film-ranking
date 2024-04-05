@@ -1,13 +1,17 @@
 import { ListService } from "services/lists";
 import "./styles.scss";
 import { Button, Input } from "components";
-import { CompilationFormProps } from "./types";
 import { CompilationCreateData } from "services/types";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import { useParams } from "react-router-dom";
+import { useMemo } from "react";
 
-export default function CompilationForm({ isEditing }: CompilationFormProps) {
+export default function CompilationForm() {
   const listService = new ListService();
+
+  const { compilationId } = useParams();
+  const isEditing = useMemo(() => !!compilationId, [compilationId]);
 
   const initialValues: CompilationCreateData = {
     title: "",
@@ -28,7 +32,7 @@ export default function CompilationForm({ isEditing }: CompilationFormProps) {
   });
 
   return (
-    <div className="compilations">
+    <div className="compilation-form">
       <form onSubmit={formik.handleSubmit}>
         <Input
           name="title"

@@ -1,6 +1,18 @@
 import Home from "./Home";
 import Login from "./Login";
-import { ListIndividualLists } from "./IndividualLists";
-import { ListCompilations, CompilationForm } from "./Compilations";
+import { ListIndividualLists, RetrieveIndividualList } from "./IndividualLists";
+import {
+  ListCompilations,
+  CompilationForm,
+  RetrieveCompilation,
+} from "./Compilations";
 
-export { Home, Login, CompilationForm, ListIndividualLists, ListCompilations };
+export {
+  Home,
+  Login,
+  CompilationForm,
+  ListIndividualLists,
+  ListCompilations,
+  RetrieveCompilation,
+  RetrieveIndividualList,
+};

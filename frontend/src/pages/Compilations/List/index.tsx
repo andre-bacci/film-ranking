@@ -18,9 +18,9 @@ export default function ListCompilations() {
 
   return (
     <>
-      <div className="compilations">
+      <div className="list-compilations">
         {compilations.map((compilation) => (
-          <CompilationComponent compilation={compilation} />
+          <CompilationComponent compilation={compilation} isList />
         ))}
         <div className="add-compilation">
           <Button cssClass="add-button" onClick={() => navigate("new")}>

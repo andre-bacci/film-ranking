@@ -3,21 +3,24 @@ import "./styles.scss";
 import { useEffect, useState } from "react";
 import { IndividualList } from "models/IndividualList";
 import { IndividualListComponent } from "components";
+import { useParams } from "react-router-dom";
 
-export default function RetrieveList() {
+export default function RetrieveIndividualList() {
   const listService = new ListService();
-  const [lists, setLists] = useState<IndividualList[]>([]);
+  const [list, setList] = useState<IndividualList>();
+  const { listId } = useParams();
 
   useEffect(() => {
-    listService.listIndividualLists().then((response) => setLists(response));
+    if (!listId) return;
+    listService
+      .retrieveIndividualList(listId)
+      .then((response) => setList(response));
   }, []);
 
   return (
     <>
       <div className="lists">
-        {lists.map((list) => (
-          <IndividualListComponent list={list} />
-        ))}
+        {list && <IndividualListComponent list={list} />}
       </div>
     </>
   );

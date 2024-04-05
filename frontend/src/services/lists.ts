@@ -33,7 +33,7 @@ export class ListService {
   }
 
   async retrieveCompilation(compilationId: string): Promise<Compilation> {
-    return get(`lists/individual_lists/${compilationId}`)
+    return get(`lists/compilations/${compilationId}`)
       .then(
         (response: CompilationData) =>  new Compilation(response)
       )
