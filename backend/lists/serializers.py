@@ -7,7 +7,6 @@ from rest_framework import serializers
 
 from users.serializers import UserSerializer
 from utils.lists import are_elements_contiguous, first_element_is_valid
-from utils.serializers import NestedSerializerManyRelationHandler
 
 from .models import Compilation, List, ListFilm, Ranking, RankingFilm
 
@@ -107,23 +106,31 @@ class ListCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Rankings should start on 1")
         return super().validate(data)
 
-    def create(self, validated_data: OrderedDict, **kwargs):
-        author_id = kwargs.get("author_id")
+    def create(self, validated_data: OrderedDict):
+        author_id = validated_data.get("author_id")
         data_copy = {**validated_data}
         list_films = data_copy.pop("list_films")
 
         new_instance = List.objects.create(**data_copy, author_id=author_id)
 
-        NestedListFilmRelationHandler(new_instance).handle_relation(
-            list_films, update_fields=("ranking", "comment", "grade")
-        )
-
-        new_instance.save()
+        for list_film in list_films:
+            ListFilm.objects.create(list_id=new_instance.id, **list_film)
 
         return new_instance
 
+    def update(self, instance: List, validated_data: OrderedDict, **kwargs):
+        data_copy = {**validated_data}
+        list_films = data_copy.pop("list_films")
 
-class NestedListFilmRelationHandler(NestedSerializerManyRelationHandler):
+        ListFilm.objects.filter(list=instance).delete()
+
+        List.objects.update(**data_copy)
+
+        for list_film in list_films:
+            ListFilm.objects.create(list_id=instance.id, **list_film)
+
+        return instance
+
     """
     Implements specific methods to handle ListFilm data, using the `list` field and the list
     id as an identifier to avoid deleting and recreating records in the database.

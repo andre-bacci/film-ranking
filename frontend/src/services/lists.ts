@@ -1,5 +1,5 @@
 import { IndividualList, IndividualListData } from "models/IndividualList";
-import { get, post } from "./axios";
+import { get, post, put } from "./axios";
 import { Compilation, CompilationData } from "models/Compilation";
 import { CompilationCreateData, IndividualListCreateData } from "./types";
 
@@ -25,6 +25,12 @@ export class ListService {
     )
   }
 
+  async updateIndividualList(data: IndividualListCreateData, listId: string): Promise<IndividualList> {
+    return put(`lists/individual_lists/${listId}/`, data).then(
+      (response: IndividualListData) => new IndividualList(response)
+    )
+  }
+
   async listCompilations(): Promise<Compilation[]> {
     return get("lists/compilations/")
       .then(
@@ -41,6 +47,12 @@ export class ListService {
 
   async createCompilation(data: CompilationCreateData): Promise<Compilation> {
     return post("lists/compilations/", data).then(
+      (response: CompilationData) => new Compilation(response)
+    )
+  }
+
+  async updateCompilation(data: CompilationCreateData, compilationId: string): Promise<Compilation> {
+    return put(`lists/compilations/${compilationId}/`, data).then(
       (response: CompilationData) => new Compilation(response)
     )
   }

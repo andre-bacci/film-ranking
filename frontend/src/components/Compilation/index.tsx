@@ -21,7 +21,9 @@ export default function CompilationComponent({
       {isList && (
         <div className="button-wrapper">
           <Button onClick={() => navigate(compilation.id)}>Detail</Button>
-          <Button>Edit</Button>
+          <Button onClick={() => navigate(`${compilation.id}/edit`)}>
+            Edit
+          </Button>
         </div>
       )}
     </div>

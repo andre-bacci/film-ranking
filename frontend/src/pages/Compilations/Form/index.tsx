@@ -5,13 +5,15 @@ import { CompilationCreateData } from "services/types";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useParams } from "react-router-dom";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Compilation } from "models/Compilation";
 
 export default function CompilationForm() {
   const listService = new ListService();
 
   const { compilationId } = useParams();
   const isEditing = useMemo(() => !!compilationId, [compilationId]);
+  const [compilation, setCompilation] = useState<Compilation>();
 
   const initialValues: CompilationCreateData = {
     title: "",
@@ -22,13 +24,27 @@ export default function CompilationForm() {
   });
 
   const sendCompilation = async (values: CompilationCreateData) => {
-    await listService.createCompilation(values);
+    if (!isEditing) {
+      await listService.createCompilation(values);
+    } else if (compilationId) {
+      await listService.updateCompilation(values, compilationId);
+    }
   };
 
+  useEffect(() => {
+    if (compilationId)
+      listService
+        .retrieveCompilation(compilationId)
+        .then((response) => setCompilation(response));
+  }, [compilationId]);
+
+  console.log(compilation);
+
   const formik = useFormik({
-    initialValues,
+    initialValues: compilation ?? initialValues,
     validationSchema: CompilationSchema,
     onSubmit: sendCompilation,
+    enableReinitialize: true,
   });
 
   return (

@@ -38,10 +38,34 @@ class CompilationView(
         if not user:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         user = User.objects.get(id=user.id)
+
         compilation_serializer = CompilationCreateSerializer(data=request.data)
         compilation_serializer.is_valid(raise_exception=True)
         compilation: Compilation = compilation_serializer.save()
         compilation.owners.add(user)
+
+        return Response(CompilationSerializer(compilation).data)
+
+    @transaction.atomic
+    def update(self, request, pk, format=None):
+        try:
+            instance = Compilation.objects.get(id=pk)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        user = request.user
+        if not user:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        user = User.objects.get(id=user.id)
+        if user not in instance.owners.all():
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        compilation_serializer = CompilationCreateSerializer(
+            instance, data=request.data
+        )
+        compilation_serializer.is_valid(raise_exception=True)
+        compilation: Compilation = compilation_serializer.save()
+
         return Response(CompilationSerializer(compilation).data)
 
     @transaction.atomic
@@ -87,10 +111,25 @@ class ListView(
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        list: List = list_serializer.create(
-            validated_data=list_serializer.validated_data,
-            author_id=user.id,
-        )
+        list: List = list_serializer.save(author_id=user.id)
+
+        return Response(ListSerializer(list).data)
+
+    @transaction.atomic
+    def update(self, request, pk, format=None):
+        try:
+            instance = List.objects.get(id=pk)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        user: User = request.user
+        if not user or instance.author_id != user.id:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        list_serializer = ListCreateSerializer(instance, data=request.data)
+        list_serializer.is_valid(raise_exception=True)
+
+        list: List = list_serializer.save()
         return Response(ListSerializer(list).data)
 
 
