@@ -9,7 +9,9 @@ urlpatterns = [
     ),
     path(
         "compilations/<str:pk>/",
-        CompilationView.as_view(actions={"get": "retrieve", "delete": "destroy"}),
+        CompilationView.as_view(
+            actions={"get": "retrieve", "put": "update", "delete": "destroy"}
+        ),
     ),
     path(
         "compilations/<str:pk>/calculate_ranking/",
@@ -29,6 +31,8 @@ urlpatterns = [
     ),
     path(
         "individual_lists/<str:pk>/",
-        ListView.as_view(actions={"get": "retrieve", "delete": "destroy"}),
+        ListView.as_view(
+            actions={"get": "retrieve", "put": "update", "delete": "destroy"}
+        ),
     ),
 ]

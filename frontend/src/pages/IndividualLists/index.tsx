@@ -1,3 +1,4 @@
 import ListIndividualLists from "./List";
+import RetrieveIndividualList from "./Retrieve";
 
-export { ListIndividualLists };
+export { ListIndividualLists, RetrieveIndividualList };

@@ -4,6 +4,7 @@ import Header from "./Header";
 import Input from "./Input";
 import IndividualListComponent from "./IndividualList";
 import ListFilmComponent from "./ListFilm";
+import CompilationComponent from "./Compilation";
 
 export {
   Button,
@@ -12,4 +13,5 @@ export {
   Input,
   IndividualListComponent,
   ListFilmComponent,
+  CompilationComponent,
 };

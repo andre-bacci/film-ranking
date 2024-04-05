@@ -11,8 +11,6 @@ export class AuthService {
 
   async login(data: LoginProps) {
     const response = await post("users/login/", data).catch((error) => toast.error(error));
-    localStorage.setItem("access_token", response.access);
-    localStorage.setItem("refresh_token", response.refresh);
     return response
   }
 
