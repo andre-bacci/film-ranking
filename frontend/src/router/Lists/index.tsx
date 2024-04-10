@@ -5,6 +5,7 @@ export default function ListRoutes() {
   return (
     <Routes>
       <Route path="/" element={<ListIndividualLists />} />
+      <Route path="/new" element={<ListIndividualLists />} />
     </Routes>
   );
 }

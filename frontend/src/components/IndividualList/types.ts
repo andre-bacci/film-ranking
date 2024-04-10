@@ -1,5 +1,6 @@
 import { IndividualList } from "models/IndividualList";
 
 export interface IndividualListProps {
-  list: IndividualList
+  list: IndividualList;
+  isDetail?: boolean;
 }

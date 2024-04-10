@@ -28,6 +28,7 @@ class CompilationCreateSerializer(serializers.ModelSerializer):
 
 class ListFilmSerializer(serializers.ModelSerializer):
     title = serializers.CharField(source="film.title")
+    film_id = serializers.CharField(source="film.id")
     directed_by = serializers.CharField(source="film.directed_by")
     written_by = serializers.CharField(source="film.written_by")
     starring = serializers.CharField(source="film.starring")
@@ -40,6 +41,7 @@ class ListFilmSerializer(serializers.ModelSerializer):
         fields.extend(
             [
                 "title",
+                "film_id",
                 "directed_by",
                 "written_by",
                 "starring",
