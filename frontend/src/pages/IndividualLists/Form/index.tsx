@@ -8,7 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { IndividualList } from "models/IndividualList";
 
-export default function CompilationForm() {
+export default function IndividualListForm() {
   const listService = new ListService();
   const navigate = useNavigate();
 
@@ -47,31 +47,18 @@ export default function CompilationForm() {
 
   console.log(initialIndividualList);
 
-  const formik = useFormik({
-    initialValues: initialIndividualList ?? emptyIndividualList,
-    validationSchema: CompilationSchema,
-    onSubmit: sendIndividualList,
-    enableReinitialize: true,
-  });
+  // const formik = useFormik({
+  //   initialValues: initialIndividualList ?? emptyIndividualList,
+  //   validationSchema: CompilationSchema,
+  //   onSubmit: sendIndividualList,
+  //   enableReinitialize: true,
+  // });
 
   return (
     <div className="compilation-form">
-      <form onSubmit={formik.handleSubmit}>
-        <Input
-          name="title"
-          label="Title"
-          type="text"
-          value={formik.values.title}
-          onChange={formik.handleChange}
-        />
-        <Button
-          cssClass="create-compilation-button"
-          type="submit"
-          disabled={!(formik.isValid && formik.dirty)}
-        >
-          <div>{isEditing ? "Update" : "Create"}</div>
-        </Button>
-      </form>
+      {/* <form onSubmit={formik.handleSubmit}>
+        <div></div>
+      </form> */}
     </div>
   );
 }
