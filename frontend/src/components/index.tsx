@@ -1,4 +1,5 @@
 import Button from "./Button";
+import Search from "./Search";
 import Footer from "./Footer";
 import Header from "./Header";
 import Input from "./Input";
@@ -8,6 +9,7 @@ import CompilationComponent from "./Compilation";
 
 export {
   Button,
+  Search,
   Footer,
   Header,
   Input,

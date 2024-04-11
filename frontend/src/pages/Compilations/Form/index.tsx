@@ -43,8 +43,6 @@ export default function CompilationForm() {
         .then((response) => setCompilation(response));
   }, [compilationId]);
 
-  console.log(compilation);
-
   const formik = useFormik({
     initialValues: compilation ?? initialValues,
     validationSchema: CompilationSchema,

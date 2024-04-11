@@ -21,12 +21,13 @@ export class IndividualList {
     this.films = data.list_films.map((list_film) => new ListFilm(list_film));
     this.comment = data.comment;
     this.compilation = new Compilation(data.compilation);
+    this.convertToCreateData.bind(this);
   }
 
-  static convertToCreateData(data: IndividualList): IndividualListCreateData {
+  convertToCreateData(): IndividualListCreateData {
     return {
-      list_films: data.films.map((film) => ListFilm.convertToCreateData(film)),
-      compilation_id: data.compilation.id
+      list_films: this.films.map((film) => ListFilm.convertToCreateData(film)),
+      compilation_id: this.compilation.id
     }
   }
 }
